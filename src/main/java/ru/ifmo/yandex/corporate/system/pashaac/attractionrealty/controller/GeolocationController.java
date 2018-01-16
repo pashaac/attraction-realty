@@ -11,7 +11,5 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
 @RestController
 public class GeolocationController {
 
-    public static void main(String[] args) {
-        
-    }
+
 }

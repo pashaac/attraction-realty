@@ -1,7 +1,8 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.9.RELEASE'
-	}
+        springBootDashboardVersion = '1.5.6'
+    }
 	repositories {
 		mavenCentral()
 	}
@@ -25,11 +26,19 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtime('org.springframework.boot:spring-boot-devtools')
 
-	runtime('org.springframework.boot:spring-boot-devtools')
-	runtime('org.postgresql:postgresql')
+    compile("de.codecentric:spring-boot-admin-server:${springBootDashboardVersion}")
+    compile("de.codecentric:spring-boot-admin-server-ui:${springBootDashboardVersion}")
+    compile("de.codecentric:spring-boot-admin-starter-client:${springBootDashboardVersion}")
+
+	// ## business logic functionality
+    compile files('src/main/resources/geocalc-0.5.1.jar')
+    compile('com.google.maps:google-maps-services:0.2.6')
 
     compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+//    compile('org.springframework.boot:spring-boot-starter-data-jpa') postgres implementation waiting...
+// 	  runtime('org.postgresql:postgresql')
 }

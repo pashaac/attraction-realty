@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Simple point on google map
+ * Bounding box around some area on the Earth
  *
  * @author Pavel Asadchiy
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Marker {
+public class BoundingBox {
 
-    private double latitude;
-    private double longitude;
+    private Marker southWest;
+    private Marker northEast;
 
 }
