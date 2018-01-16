@@ -1,6 +1,7 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.domain.ApiCity;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
 
 /**
@@ -17,7 +17,7 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.Geolocat
  */
 @RestController
 @RequestMapping("/geolocation")
-@ApiModel(value = "Geolocation logic manager", description = "API to work with project geolocation resources")
+@Api(value = "Geolocation logic manager", description = "API to work with project geolocation resources")
 public class GeolocationController {
 
     private final GeolocationService geolocationService;
@@ -27,11 +27,13 @@ public class GeolocationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Marker golocation(@RequestParam @ApiParam(value = "address of the point", required = true) String  address) {
+    @ApiOperation(value = "Determine point on the Earth by human readable address")
+    public Marker golocation(@RequestParam @ApiParam(value = "address to determine point on the Earth", required = true) String address) {
         return geolocationService.geolocation(address);
     }
 
     @RequestMapping(path = "/reverse", method = RequestMethod.GET)
+    @ApiOperation(value = "Determine city and country point on the Earth / coordinates")
     public ApiCity reverseGeolocation(@RequestParam @ApiParam(value = "latitude of the point", required = true) double lat,
                                       @RequestParam @ApiParam(value = "longitude of the point", required = true) double lng) {
         return ApiCity.of(geolocationService.reverseGeolocation(new Marker(lat, lng)));

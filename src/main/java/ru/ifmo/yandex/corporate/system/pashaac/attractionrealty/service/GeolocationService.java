@@ -6,10 +6,11 @@ import com.google.maps.model.Bounds;
 import com.google.maps.model.GeocodingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ public class GeolocationService {
 
     private final GoogleGeoApiService googleGeoApiService;
 
+    @Autowired
     public GeolocationService(GoogleGeoApiService googleGeoApiService) {
         this.googleGeoApiService = googleGeoApiService;
     }
@@ -45,15 +47,10 @@ public class GeolocationService {
         return new City(city.longName, country.longName);
     }
 
-    public Marker geolocation(City city) {
-        return geolocation(String.format("%s, %s", city.getCity(), city.getCountry()));
-    }
-
     public Marker geolocation(String address) {
         Bounds box = Arrays.stream(googleGeoApiService.geocode(address))
                 .map(geocodingResult -> geocodingResult.geometry.bounds)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("Can't determine coordinates by address %s", address)));
-        new BoundingBox(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
-        return null; // TODO: need fix in future
+        return GeoEarthMathUtils.median(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
     }
 }

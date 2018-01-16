@@ -39,7 +39,7 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title("Attraction realty")
                 .description("Geo worldwide investment platform for real estate objects based / influenced on tourist attractions")
-                .contact(new Contact("Pavel Asadchiy", "vk.com/pasha_ac", "pavel.asadchiy@gmail.com"))
+                .contact(new Contact("Pavel Asadchiy", "https://vk.com/pasha_ac", "pavel.asadchiy@gmail.com"))
                 .version("1.0")
                 .build();
     }
