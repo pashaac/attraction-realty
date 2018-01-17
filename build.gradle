@@ -36,7 +36,7 @@ dependencies {
     compile 'io.springfox:springfox-swagger-ui:2.8.0'
 
     // ## business logic functionality
-    compile files('src/main/resources/geocalc-0.5.1.jar')
+    compile files('src/main/resources/libs/geocalc-0.5.1.jar')
     compile 'com.google.maps:google-maps-services:0.2.6'
 
     compileOnly 'org.projectlombok:lombok'

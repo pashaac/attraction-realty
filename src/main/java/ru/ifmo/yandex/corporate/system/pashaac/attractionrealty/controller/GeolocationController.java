@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.domain.ApiCity;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
 
 /**
@@ -28,15 +28,15 @@ public class GeolocationController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Determine point on the Earth by human readable address")
-    public Marker golocation(@RequestParam @ApiParam(value = "address to determine point on the Earth", required = true) String address) {
+    public Marker geolocation(@RequestParam @ApiParam(value = "address to determine point on the Earth", required = true) String address) {
         return geolocationService.geolocation(address);
     }
 
     @RequestMapping(path = "/reverse", method = RequestMethod.GET)
     @ApiOperation(value = "Determine city and country point on the Earth / coordinates")
-    public ApiCity reverseGeolocation(@RequestParam @ApiParam(value = "latitude of the point", required = true) double lat,
-                                      @RequestParam @ApiParam(value = "longitude of the point", required = true) double lng) {
-        return ApiCity.of(geolocationService.reverseGeolocation(new Marker(lat, lng)));
+    public City reverseGeolocation(@RequestParam @ApiParam(value = "latitude of the point", required = true) double lat,
+                                   @RequestParam @ApiParam(value = "longitude of the point", required = true) double lng) {
+        return geolocationService.reverseGeolocation(new Marker(lat, lng));
     }
 
 }
