@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.9.RELEASE'
-        springBootDashboardVersion = '1.5.6'
+        springBootAdminVersion = '1.5.6'
     }
 	repositories {
 		mavenCentral()
@@ -24,12 +24,13 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework.boot:spring-boot-starter-web'
     runtime 'org.springframework.boot:spring-boot-devtools'
 
-    compile "de.codecentric:spring-boot-admin-server:${springBootDashboardVersion}"
-    compile "de.codecentric:spring-boot-admin-server-ui:${springBootDashboardVersion}"
-    compile "de.codecentric:spring-boot-admin-starter-client:${springBootDashboardVersion}"
+    compile "de.codecentric:spring-boot-admin-server:${springBootAdminVersion}"
+    compile "de.codecentric:spring-boot-admin-server-ui:${springBootAdminVersion}"
+    compile "de.codecentric:spring-boot-admin-starter-client:${springBootAdminVersion}"
 
     compile 'io.springfox:springfox-swagger2:2.8.0'
     compile 'io.springfox:springfox-swagger-ui:2.8.0'
@@ -41,6 +42,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 
-//    compile('org.springframework.boot:spring-boot-starter-data-jpa') postgres implementation waiting...
+//    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 // 	  runtime('org.postgresql:postgresql')
 }
