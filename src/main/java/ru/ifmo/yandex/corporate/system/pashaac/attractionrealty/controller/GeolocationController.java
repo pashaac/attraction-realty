@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.domain.ApiCity;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
@@ -34,9 +35,17 @@ public class GeolocationController {
 
     @RequestMapping(path = "/reverse", method = RequestMethod.GET)
     @ApiOperation(value = "Determine city and country point on the Earth / coordinates")
-    public City reverseGeolocation(@RequestParam @ApiParam(value = "latitude of the point", required = true) double lat,
-                                   @RequestParam @ApiParam(value = "longitude of the point", required = true) double lng) {
-        return geolocationService.reverseGeolocation(new Marker(lat, lng));
+    public ApiCity reverseGeolocation(@RequestParam @ApiParam(value = "latitude of the point", required = true) double lat,
+                                      @RequestParam @ApiParam(value = "longitude of the point", required = true) double lng,
+                                      @RequestParam @ApiParam(value = "flag, add boundingbox entity to response", defaultValue = "false") boolean isBoundingBox) {
+        City city = geolocationService.reverseGeolocation(new Marker(lat, lng));
+        ApiCity.ApiCityBuilder apiCityBuilder = ApiCity.builder()
+                .city(city.getCity())
+                .country(city.getCountry());
+        if (isBoundingBox) {
+           apiCityBuilder.boundingBox(geolocationService.boundingBoxGeolocation(city));
+        }
+        return apiCityBuilder.build();
     }
 
 }

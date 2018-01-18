@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
@@ -47,10 +48,19 @@ public class GeolocationService {
         return new City(city.longName, country.longName);
     }
 
-    public Marker geolocation(String address) {
+    private BoundingBox geometryGeolocation(String address) {
         Bounds box = Arrays.stream(googleGeoApiService.geocode(address))
                 .map(geocodingResult -> geocodingResult.geometry.bounds)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("Can't determine coordinates by address %s", address)));
-        return GeoEarthMathUtils.median(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
+        return new BoundingBox(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
+    }
+
+    public Marker geolocation(String address) {
+        BoundingBox boundingBox = geometryGeolocation(address);
+        return GeoEarthMathUtils.median(boundingBox.getSouthWest(), boundingBox.getNorthEast());
+    }
+
+    public BoundingBox boundingBoxGeolocation(City city) {
+        return geometryGeolocation(String.format("%s, %s", city.getCity(), city.getCountry()));
     }
 }
