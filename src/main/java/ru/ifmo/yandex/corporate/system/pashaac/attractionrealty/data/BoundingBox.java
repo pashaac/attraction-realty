@@ -1,4 +1,4 @@
-package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain;
+package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

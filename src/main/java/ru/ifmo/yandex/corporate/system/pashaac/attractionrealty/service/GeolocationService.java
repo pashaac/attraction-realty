@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.BoundingBox;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
 
 import java.util.Arrays;

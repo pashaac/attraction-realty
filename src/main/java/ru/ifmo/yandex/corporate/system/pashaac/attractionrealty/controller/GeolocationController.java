@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.domain.ApiCity;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.entity.City;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
 
 /**

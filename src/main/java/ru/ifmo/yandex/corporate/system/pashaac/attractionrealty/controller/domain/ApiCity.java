@@ -3,13 +3,11 @@ package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.doma
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.BoundingBox;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 
 import javax.annotation.Nullable;
 
 @Data
-@NoArgsConstructor
 @Builder
 public class ApiCity {
 

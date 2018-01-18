@@ -7,7 +7,7 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Marker;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

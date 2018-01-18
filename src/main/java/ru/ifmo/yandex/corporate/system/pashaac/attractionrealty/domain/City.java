@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Simple point on google map
+ * City entity with city/country identification variables
  *
  * @author Pavel Asadchiy
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Marker {
+public class City {
 
-    private double latitude;
-    private double longitude;
+    private String city;
+    private String country;
 
 }
