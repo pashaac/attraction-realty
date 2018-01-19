@@ -1,7 +1,7 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data;
 
 public enum VenueCategory {
-    MUSEUM,
+    MUSEUM("", ""),
     PARK,
     PLAZA,
     SHRINE,
@@ -9,5 +9,13 @@ public enum VenueCategory {
     FOUNTAIN,
     GARDEN,
     PALACE,
-    CASTLE,
+    CASTLE;
+
+    private String foursquareKey;
+    private String googleKey;
+
+    VenueCategory(String foursquareKey, String googleKey) {
+        this.foursquareKey = foursquareKey;
+        this.googleKey = googleKey;
+    }
 }

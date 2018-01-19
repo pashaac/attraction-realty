@@ -93,8 +93,8 @@ public class FoursquareClient {
                     Venue fVenue = new Venue();
 
                     fVenue.setTitle(titleNormalization(venue.getName()));
-                    fVenue.setDescription(String.format("Contacts:\nPhone: %s\nE-mail: %s\nTwitter: %s\nFacebook: %s\n\n" +
-                                    "URL: %s\n\n" + "Statistic info:\nRating: %s\nCheckins: %s\n, Users: %s\n, Tip: %s",
+                    fVenue.setDescription(String.format("Contacts:\t\nPhone: %s\t\nE-mail: %s\t\nTwitter: %s\t\nFacebook: %s\n" +
+                                    "URL: %s\n" + "Statistic info:\t\nRating: %s\t\nCheckins: %s\t\nUsers: %s\t\nTip: %s\n",
                             venue.getContact().getFormattedPhone(), venue.getContact().getEmail(), venue.getContact().getTwitter(),
                             venue.getContact().getFacebook(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
                             venue.getStats().getUsersCount(), venue.getStats().getTipCount()));

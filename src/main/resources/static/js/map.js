@@ -29,7 +29,7 @@ function buildMap(center) {
             {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
             {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
             {
-                featureType: 'administrative.locality',
+                featureType: 'administrative.   locality',
                 elementType: 'labels.text.fill',
                 stylers: [{color: '#d59563'}]
             },
