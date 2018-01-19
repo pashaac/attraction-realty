@@ -22,4 +22,13 @@ public enum VenueCategory {
     public static VenueCategory valueOfByFoursquareKey(String foursquareKey) {
         return MUSEUM; // TODO: create normal validator
     }
+
+
+    public String getFoursquareKey() {
+        return foursquareKey;
+    }
+
+    public String getGoogleKey() {
+        return googleKey;
+    }
 }

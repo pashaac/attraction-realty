@@ -21,16 +21,16 @@ public class GeolocationService {
 
     private static final Logger logger = LoggerFactory.getLogger(GeolocationService.class);
 
-    private final GoogleGeoApiService googleGeoApiService;
+    private final GoogleGeoService googleGeoService;
 
     @Autowired
-    public GeolocationService(GoogleGeoApiService googleGeoApiService) {
-        this.googleGeoApiService = googleGeoApiService;
+    public GeolocationService(GoogleGeoService googleGeoService) {
+        this.googleGeoService = googleGeoService;
     }
 
     public City reverseGeolocation(Marker location) {
 
-        GeocodingResult[] geocodingResults = googleGeoApiService.reverseGeocode(location);
+        GeocodingResult[] geocodingResults = googleGeoService.reverseGeocode(location);
 
         List<AddressComponentType> cityIdentifiers = Arrays.asList(AddressComponentType.LOCALITY, AddressComponentType.POLITICAL);
         AddressComponent city = Arrays.stream(geocodingResults)
@@ -53,7 +53,7 @@ public class GeolocationService {
     }
 
     public Marker geolocation(String address) {
-        Bounds box = Arrays.stream(googleGeoApiService.geocode(address))
+        Bounds box = Arrays.stream(googleGeoService.geocode(address))
                 .map(geocodingResult -> geocodingResult.geometry.bounds)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("Can't determine coordinates by address %s", address)));
         return GeoEarthMathUtils.median(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));

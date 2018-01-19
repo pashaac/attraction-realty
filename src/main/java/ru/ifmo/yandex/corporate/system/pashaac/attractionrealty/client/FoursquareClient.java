@@ -139,5 +139,9 @@ public class FoursquareClient {
 
         return normalizeTitle;
     }
+
+    public Integer getVenueSearchLimit() {
+        return limit;
+    }
 }
 

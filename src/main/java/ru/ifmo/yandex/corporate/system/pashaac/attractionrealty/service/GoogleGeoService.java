@@ -18,15 +18,15 @@ import java.util.concurrent.TimeUnit;
  * @author Pavel Asadchiy
  */
 @Service
-public class GoogleGeoApiService {
+public class GoogleGeoService {
 
     private final GeoApiContext googleGeoApiContext;
 
-    public GoogleGeoApiService(@Value("${google.api.key}") String googleApiKey,
-                               @Value("${google.api.max.queries.per.second}") Integer googleApiMaxQueries,
-                               @Value("${google.api.read.timeout}") Integer googleApiReadTimeout,
-                               @Value("${google.api.write.timeout}") Integer googleApiWriteTimeout,
-                               @Value("${google.api.connect.timeout}") Integer googleApiConnectTimeout) {
+    public GoogleGeoService(@Value("${google.api.key}") String googleApiKey,
+                            @Value("${google.api.max.queries.per.second}") Integer googleApiMaxQueries,
+                            @Value("${google.api.read.timeout}") Integer googleApiReadTimeout,
+                            @Value("${google.api.write.timeout}") Integer googleApiWriteTimeout,
+                            @Value("${google.api.connect.timeout}") Integer googleApiConnectTimeout) {
         this.googleGeoApiContext = new GeoApiContext.Builder()
                 .apiKey(googleApiKey)
                 .queryRateLimit(googleApiMaxQueries)
