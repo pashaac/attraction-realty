@@ -56,7 +56,7 @@ public class GeolocationService {
         Bounds box = Arrays.stream(googleGeoService.geocode(address))
                 .map(geocodingResult -> geocodingResult.geometry.bounds)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("Can't determine coordinates by address %s", address)));
-        return GeoEarthMathUtils.median(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
+        return GeoEarthMathUtils.center(new BoundingBox(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng)));
     }
 
 }

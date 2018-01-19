@@ -13,7 +13,7 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
  */
 public class GeoEarthMathUtils {
 
-    private static double distance(Marker point1, Marker point2) {
+    public static double distance(Marker point1, Marker point2) {
         return EarthCalc.getVincentyDistance(convert(point1), convert(point2));
     }
 
@@ -21,11 +21,15 @@ public class GeoEarthMathUtils {
         return new Point(new DegreeCoordinate(marker.getLatitude()), new DegreeCoordinate(marker.getLongitude()));
     }
 
-    public static Marker median(Marker point1, Marker point2) {
+    private static Marker median(Marker point1, Marker point2) {
         double bearing = EarthCalc.getBearing(convert(point1), convert(point2));
         double distance = distance(point1, point2);
         Point median = EarthCalc.pointRadialDistance(convert(point1), bearing, 0.5 * distance);
         return new Marker(median.getLatitude(), median.getLongitude());
+    }
+
+    public static Marker center(BoundingBox boundingBox) {
+        return median(boundingBox.getSouthWest(), boundingBox.getNorthEast());
     }
 
     private static Marker boundingBoxCenter(BoundingBox box) {

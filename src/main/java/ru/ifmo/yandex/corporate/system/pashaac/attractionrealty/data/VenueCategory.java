@@ -1,20 +1,22 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data;
 
+import com.google.maps.model.PlaceType;
+
 public enum VenueCategory {
-    MUSEUM("", ""),
-    PARK("", ""),
-    PLAZA("", ""),
-    SHRINE("", ""),
-    THEATER("", ""),
-    FOUNTAIN("", ""),
-    GARDEN("", ""),
-    PALACE("", ""),
-    CASTLE("", "");
+    MUSEUM("", null),
+    PARK("", null),
+    PLAZA("", null),
+    SHRINE("", null),
+    THEATER("", null),
+    FOUNTAIN("", null),
+    GARDEN("", null),
+    PALACE("", null),
+    CASTLE("", null);
 
     private String foursquareKey;
-    private String googleKey;
+    private PlaceType googleKey;
 
-    VenueCategory(String foursquareKey, String googleKey) {
+    VenueCategory(String foursquareKey, PlaceType googleKey) {
         this.foursquareKey = foursquareKey;
         this.googleKey = googleKey;
     }
@@ -28,7 +30,7 @@ public enum VenueCategory {
         return foursquareKey;
     }
 
-    public String getGoogleKey() {
+    public PlaceType getGoogleKey() {
         return googleKey;
     }
 }

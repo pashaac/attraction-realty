@@ -95,10 +95,10 @@ public class FoursquareClient {
                     Venue fVenue = new Venue();
 
                     fVenue.setTitle(titleNormalization(venue.getName()));
-                    fVenue.setDescription(String.format("Contacts:\t\nPhone: %s\t\nE-mail: %s\t\nTwitter: %s\t\nFacebook: %s\n" +
-                                    "URL: %s\n" + "Statistic info:\t\nRating: %s\t\nCheckins: %s\t\nUsers: %s\t\nTip: %s\n",
+                    fVenue.setDescription(String.format("Contact info:\n\tPhone: %s\n\tE-mail: %s\n\tTwitter: %s\n\tFacebook: %s\n\tId: %s\n" +
+                                    "URL: %s\n" + "Statistic info:\n\tRating: %s\n\tCheckins: %s\n\tUsers: %s\n\tTip: %s\n",
                             venue.getContact().getFormattedPhone(), venue.getContact().getEmail(), venue.getContact().getTwitter(),
-                            venue.getContact().getFacebook(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
+                            venue.getContact().getFacebook(),venue.getId(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
                             venue.getStats().getUsersCount(), venue.getStats().getTipCount()));
 
                     fVenue.setCategory(categoryValueOf(venue, foursquareCategories));
