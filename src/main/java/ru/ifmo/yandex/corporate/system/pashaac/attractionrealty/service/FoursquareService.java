@@ -2,7 +2,6 @@ package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service;
 
 import org.springframework.stereotype.Service;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.client.FoursquareClient;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 
@@ -21,7 +20,8 @@ public class FoursquareService {
         this.foursquareClient = foursquareClient;
     }
 
-    public List<Venue> mine(City city, BoundingBox boundingBox) {
-        foursquareClient.search(boundingBox, )
+    public List<Venue> mine(City city) {
+        String foursquareCategories = "";
+        return foursquareClient.search(city.getBoundingBox(), foursquareCategories);
     }
 }

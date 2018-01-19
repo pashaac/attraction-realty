@@ -5,7 +5,6 @@ import fi.foyt.foursquare.api.FoursquareApiException;
 import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,22 +53,25 @@ public class FoursquareClient {
     }
 
     private VenueCategory categoryValueOf(CompactVenue venue, String foursquareCategoryIds) {
-        return null;
-//        Arrays.stream(venue.getCategories())
+        return VenueCategory.MUSEUM; // TODO: fix category value of
+        //        Arrays.stream(venue.getCategories())
 //                .filter(category -> PlaceType.containsOnlyInArg(category.getId(), foursquareCategoryIds))
 //                .map(category -> PlaceType.of(category.getId()))
 //                .filter(Optional::isPresent).map(Optional::get).findFirst();
     }
 
-    @SneakyThrows(InterruptedException.class)
-    public List<Venue> search(BoundingBox boundingBox, String foursquareCategoryIds) {
+    public List<Venue> search(BoundingBox boundingBox, String foursquareCategories) {
         try {
-            return apiCall(boundingBox, foursquareCategoryIds);
+            return apiCall(boundingBox, foursquareCategories);
         } catch (FoursquareApiException ignored) {
             logger.info("Sleep for {} milliseconds before request retry...", delay);
-            Thread.sleep(delay);
             try {
-                return apiCall(boundingBox, foursquareCategoryIds);
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                logger.warn("Thread sleep between foursquare API calls was interrupted");
+            }
+            try {
+                return apiCall(boundingBox, foursquareCategories);
             } catch (FoursquareApiException e) {
                 logger.error("Error during foursquare API call, message {}", e.getMessage());
                 return Collections.emptyList();
