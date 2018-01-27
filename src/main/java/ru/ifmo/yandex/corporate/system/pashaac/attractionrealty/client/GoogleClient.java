@@ -14,14 +14,13 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueSource;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.VenueTitlesUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -93,7 +92,7 @@ public class GoogleClient {
 
                     Venue gVenue = new Venue();
 
-                    gVenue.setTitle(titleNormalization(venue.name));
+                    gVenue.setTitle(VenueTitlesUtils.titleNormalization(venue.name));
                     gVenue.setDescription(String.format("Contact info:\n\tId: %s\n\tIcon: %s\nTypes: %s\nStatistic info:\n\tRating: %s", venue.placeId,
                             venue.icon, Arrays.toString(venue.types), venue.rating));
 
@@ -116,24 +115,6 @@ public class GoogleClient {
                 .collect(Collectors.toList());
     }
 
-    private String titleNormalization(String title) {
-        String normalizeTitle = title.replaceAll("\\s+", " ").trim();
-
-        Pattern doubleQuotes = Pattern.compile("^(.*)\"(.*)\"(.*)$");
-        Pattern singleQuotes = Pattern.compile("^(.*)'(.*)'(.*)$");
-
-        Matcher matcher;
-        matcher = doubleQuotes.matcher(normalizeTitle);
-        while (matcher.find()) {
-            normalizeTitle = matcher.replaceFirst("$1«$2»$3");
-        }
-        matcher = singleQuotes.matcher(normalizeTitle);
-        while (matcher.find()) {
-            normalizeTitle = matcher.replaceFirst("$1«$2»$3");
-        }
-
-        return normalizeTitle;
-    }
 
     public Integer getVenueSearchLimit() {
         return limit;

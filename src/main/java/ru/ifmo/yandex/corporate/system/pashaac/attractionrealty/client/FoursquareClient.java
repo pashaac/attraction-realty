@@ -16,10 +16,9 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCategory;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueSource;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.VenueTitlesUtils;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -94,7 +93,7 @@ public class FoursquareClient {
                 .map(venue -> {
                     Venue fVenue = new Venue();
 
-                    fVenue.setTitle(titleNormalization(venue.getName()));
+                    fVenue.setTitle(VenueTitlesUtils.titleNormalization(venue.getName()));
                     fVenue.setDescription(String.format("Contact info:\n\tPhone: %s\n\tE-mail: %s\n\tTwitter: %s\n\tFacebook: %s\n\tId: %s\n" +
                                     "URL: %s\n" + "Statistic info:\n\tRating: %s\n\tCheckins: %s\n\tUsers: %s\n\tTip: %s\n",
                             venue.getContact().getFormattedPhone(), venue.getContact().getEmail(), venue.getContact().getTwitter(),
@@ -119,25 +118,6 @@ public class FoursquareClient {
                     return fVenue;
                 })
                 .collect(Collectors.toList());
-    }
-
-    private String titleNormalization(String title) {
-        String normalizeTitle = title.replaceAll("\\s+", " ").trim();
-
-        Pattern doubleQuotes = Pattern.compile("^(.*)\"(.*)\"(.*)$");
-        Pattern singleQuotes = Pattern.compile("^(.*)'(.*)'(.*)$");
-
-        Matcher matcher;
-        matcher = doubleQuotes.matcher(normalizeTitle);
-        while (matcher.find()) {
-            normalizeTitle = matcher.replaceFirst("$1«$2»$3");
-        }
-        matcher = singleQuotes.matcher(normalizeTitle);
-        while (matcher.find()) {
-            normalizeTitle = matcher.replaceFirst("$1«$2»$3");
-        }
-
-        return normalizeTitle;
     }
 
     public Integer getVenueSearchLimit() {

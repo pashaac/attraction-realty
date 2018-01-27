@@ -9,7 +9,7 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueSource
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.QuadTreeAlgorithmDataCollector;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.algorithm.QuadTreeAlgorithmDataCollector;
 
 import java.util.List;
 

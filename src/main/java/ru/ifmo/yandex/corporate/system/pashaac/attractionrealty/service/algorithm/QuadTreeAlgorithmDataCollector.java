@@ -1,4 +1,4 @@
-package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service;
+package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,8 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCatego
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueSource;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.FoursquareService;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GoogleService;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
 
 import java.util.ArrayDeque;
