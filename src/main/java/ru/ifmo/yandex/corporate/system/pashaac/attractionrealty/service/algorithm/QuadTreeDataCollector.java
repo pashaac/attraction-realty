@@ -18,22 +18,20 @@ import java.util.List;
 import java.util.Queue;
 
 @Service
-public class QuadTreeAlgorithmDataCollector {
+public class QuadTreeDataCollector {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuadTreeAlgorithmDataCollector.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuadTreeDataCollector.class);
 
     private final FoursquareService foursquareService;
     private final GoogleService googleService;
 
 
-    public QuadTreeAlgorithmDataCollector(FoursquareService foursquareService, GoogleService googleService) {
+    public QuadTreeDataCollector(FoursquareService foursquareService, GoogleService googleService) {
         this.foursquareService = foursquareService;
         this.googleService = googleService;
     }
 
-    public List<Venue> mine(City city, VenueSource source) {
-        VenueCategory category = VenueCategory.MUSEUM; // TODO: create normal to search through categories
-
+    public List<Venue> mine(City city, VenueSource source, VenueCategory... categories) {
         long startTime = System.currentTimeMillis();
         List<Venue> venues = new ArrayList<>();
         Queue<BoundingBox> boxQueue = new ArrayDeque<>();
@@ -41,23 +39,31 @@ public class QuadTreeAlgorithmDataCollector {
         int ind = 0;
         int apiCallCounter = 0;
         while (!boxQueue.isEmpty()) {
-            logger.debug("Trying to get places {} for boundingbox #{}...", category, ind++);
+            logger.debug("Trying to get places {} for boundingbox #{}...", categories, ind++);
             BoundingBox boundingBox = boxQueue.poll();
             List<Venue> boundingBoxVenues = new ArrayList<>();
+            boolean reachTheLimits = false;
             switch (source) {
                 case GOOGLE:
+                    boundingBoxVenues = googleService.mine(boundingBox, categories);
+                    ++apiCallCounter;
+                    reachTheLimits = googleService.isReachTheLimits(boundingBoxVenues);
+                    break;
                 case FOURSQUARE:
-                    boundingBoxVenues = foursquareService.mine(boundingBox, category);
-                    if (foursquareService.isMaxVenues(boundingBoxVenues)) {
-                        logger.debug("Split bounding box, because {} discovered max amount of venues", VenueSource.FOURSQUARE);
-                        boxQueue.add(GeoEarthMathUtils.leftDownBoundingBox(boundingBox));
-                        boxQueue.add(GeoEarthMathUtils.leftUpBoundingBox(boundingBox));
-                        boxQueue.add(GeoEarthMathUtils.rightDownBoundingBox(boundingBox));
-                        boxQueue.add(GeoEarthMathUtils.rightUpBoundingBox(boundingBox));
-                        continue;
-                    }
+                    boundingBoxVenues = foursquareService.mine(boundingBox, categories);
+                    ++apiCallCounter;
+                    reachTheLimits = foursquareService.isReachTheLimits(boundingBoxVenues);
+                    break;
             }
-            ++apiCallCounter;
+            if (reachTheLimits) {
+                logger.debug("Split bounding box, because {} discovered max amount of venues", source);
+                boxQueue.add(GeoEarthMathUtils.leftDownBoundingBox(boundingBox));
+                boxQueue.add(GeoEarthMathUtils.leftUpBoundingBox(boundingBox));
+                boxQueue.add(GeoEarthMathUtils.rightDownBoundingBox(boundingBox));
+                boxQueue.add(GeoEarthMathUtils.rightUpBoundingBox(boundingBox));
+                continue;
+            }
+
 
             int searchedBefore = venues.size();
             switch (source) {

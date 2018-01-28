@@ -51,12 +51,8 @@ public class FoursquareClient {
         return params;
     }
 
-    private VenueCategory categoryValueOf(CompactVenue venue, String foursquareCategoryIds) {
+    private VenueCategory categoryValueOf(CompactVenue venue) {
         return VenueCategory.MUSEUM; // TODO: fix category value of
-        //        Arrays.stream(venue.getCategories())
-//                .filter(category -> PlaceType.containsOnlyInArg(category.getId(), foursquareCategoryIds))
-//                .map(category -> PlaceType.of(category.getId()))
-//                .filter(Optional::isPresent).map(Optional::get).findFirst();
     }
 
     public List<Venue> search(BoundingBox boundingBox, String foursquareCategories) {
@@ -100,7 +96,7 @@ public class FoursquareClient {
                             venue.getContact().getFacebook(),venue.getId(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
                             venue.getStats().getUsersCount(), venue.getStats().getTipCount()));
 
-                    fVenue.setCategory(categoryValueOf(venue, foursquareCategories));
+                    fVenue.setCategory(categoryValueOf(venue));
                     fVenue.setSource(VenueSource.FOURSQUARE);
 
                     fVenue.setLocation(new Marker(venue.getLocation().getLat(), venue.getLocation().getLng()));

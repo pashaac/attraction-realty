@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCategory;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueSource;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -59,9 +61,9 @@ public class GoogleClient {
         return GeocodingApi.geocode(googleGeoApiContext, address).await();
     }
 
-    public List<Venue> search(BoundingBox boundingBox, PlaceType... googlePlaceTypes) {
+    public List<Venue> search(BoundingBox boundingBox, String googleCategories) {
         try {
-            return apiCall(boundingBox, googlePlaceTypes);
+            return apiCall(boundingBox, googleCategories);
         } catch (InterruptedException | ApiException | IOException ignored) {
             logger.info("Sleep for {} milliseconds before request retry...", delay);
             try {
@@ -70,20 +72,20 @@ public class GoogleClient {
                 logger.warn("Thread sleep between foursquare API calls was interrupted");
             }
             try {
-                return apiCall(boundingBox, googlePlaceTypes);
+                return apiCall(boundingBox, googleCategories);
             } catch (InterruptedException | ApiException | IOException e) {
-                logger.error("Error during foursquare API call, message {}", e.getMessage());
+                logger.error("Error during google API call, message {}", e.getMessage());
                 return Collections.emptyList();
             }
         }
     }
 
-    private List<Venue> apiCall(BoundingBox boundingBox, PlaceType... googlePlaceTypes) throws InterruptedException, ApiException, IOException {
+    private List<Venue> apiCall(BoundingBox boundingBox, String googleCategories) throws InterruptedException, ApiException, IOException {
         Marker center = GeoEarthMathUtils.center(boundingBox);
         int radius = (int) GeoEarthMathUtils.distance(center, boundingBox.getNorthEast());
         PlacesSearchResponse placesSearchResponse = PlacesApi.nearbySearchQuery(googleGeoApiContext, new LatLng(center.getLatitude(), center.getLongitude()))
                 .radius(radius)
-                .type(googlePlaceTypes)
+                .custom("type", googleCategories)
                 .rankby(RankBy.DISTANCE)
                 .await();
 
@@ -96,7 +98,7 @@ public class GoogleClient {
                     gVenue.setDescription(String.format("Contact info:\n\tId: %s\n\tIcon: %s\nTypes: %s\nStatistic info:\n\tRating: %s", venue.placeId,
                             venue.icon, Arrays.toString(venue.types), venue.rating));
 
-//                    gVenue.setCategory(categoryValueOf(venue, foursquareCategories)); TODO: implement categories evaluation
+                    gVenue.setCategory(categoryValueOf(venue));
                     gVenue.setSource(VenueSource.GOOGLE);
 
                     gVenue.setLocation(new Marker(venue.geometry.location.lat, venue.geometry.location.lng));
@@ -113,6 +115,13 @@ public class GoogleClient {
                     return gVenue;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private VenueCategory categoryValueOf(PlacesSearchResult venue) {
+        return Arrays.stream(venue.types)
+                .map(VenueCategory::valueOfByGoogleKey)
+                .filter(Optional::isPresent)
+                .findFirst().get().get(); // TODO: fix unchecked .get() calls
     }
 
 

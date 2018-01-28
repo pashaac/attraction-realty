@@ -1,6 +1,7 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data;
 
-import com.google.maps.model.PlaceType;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Venue universal categories
@@ -10,42 +11,62 @@ import com.google.maps.model.PlaceType;
 public enum VenueCategory {
     // Foursquare: Museum
     // Google: Museum
-    MUSEUM("4bf58dd8d48988d181941735", PlaceType.MUSEUM),
-    // Foursquare: Theme Park, Park, Garden
+    MUSEUM("4bf58dd8d48988d181941735", "museum"),
+    // Foursquare: Theme Park, Park, Garden, Forest, National park
     // Google: Park
-    PARK("4bf58dd8d48988d182941735,4bf58dd8d48988d163941735,4bf58dd8d48988d15a941735", PlaceType.PARK),
-    // Foursquare: Theater
+    PARK("4bf58dd8d48988d182941735,4bf58dd8d48988d163941735,4bf58dd8d48988d15a941735,52e81612bcbc57f1066b7a23,52e81612bcbc57f1066b7a21", "park"),
+    // Foursquare: Theater, Opera house
     // Google:
-    THEATER("4bf58dd8d48988d137941735", null),
+    THEATER("4bf58dd8d48988d137941735,4bf58dd8d48988d136941735", null),
     // Foursquare: Spiritual Center
     // Google: Place of worship
-    SHRINE("4bf58dd8d48988d131941735", PlaceType.PLACE_OF_WORSHIP),
+    SHRINE("4bf58dd8d48988d131941735", "place_of_worship"),
+    // Foursquare: Street art, Water park, Zoo, Beach, Bridge, Castle, Fountain, Palace, Pedestrian Plaza, Plaza
+    // Google: Point of interest
+    POINT_OF_INTEREST("507c8c4091d498d9fc8c67a9,4bf58dd8d48988d193941735,4bf58dd8d48988d17b941735,4bf58dd8d48988d1e2941735,4bf58dd8d48988d1df941735" +
+            ",50aaa49e4b90af0d42d5de11,56aa371be4b08b9a8d573547,52e81612bcbc57f1066b7a14,52e81612bcbc57f1066b7a25,4bf58dd8d48988d164941735", "point_of_interest");
 
-    PLAZA("", null),
-    FOUNTAIN("", null),
-    PALACE("", null),
-
-    ART("", null),
-    CASTLE("", null);
+    // TODO: add bars / party places etc.
 
     private String foursquareKey;
-    private PlaceType googleKey;
+    private String googleKey;
 
-    VenueCategory(String foursquareKey, PlaceType googleKey) {
+    VenueCategory(String foursquareKey, String googleKey) {
         this.foursquareKey = foursquareKey;
         this.googleKey = googleKey;
     }
-
-    public static VenueCategory valueOfByFoursquareKey(String foursquareKey) {
-        return MUSEUM; // TODO: create normal validator
-    }
-
 
     public String getFoursquareKey() {
         return foursquareKey;
     }
 
-    public PlaceType getGoogleKey() {
+    public String getGoogleKey() {
         return googleKey;
     }
+
+    public static Optional<VenueCategory> valueOfByFoursquareKey(String foursquareKey) {
+        for (VenueCategory category : values()) {
+            if (category.foursquareKey.contains(foursquareKey)) {
+                return Optional.of(category);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<VenueCategory> valueOfByGoogleKey(String googleKey) {
+        for (VenueCategory category : values()) {
+            if (Objects.isNull(category.googleKey)) {
+                continue;
+            }
+            if (category.googleKey.contains(googleKey)) {
+                return Optional.of(category);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static VenueCategory[] touristAttractions() {
+        return new VenueCategory[]{MUSEUM, PARK, THEATER, SHRINE, POINT_OF_INTEREST};
+    }
+
 }
