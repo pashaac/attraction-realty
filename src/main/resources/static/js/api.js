@@ -5,6 +5,7 @@ var reverseGeolocation = function (args) {
             {lat: city.boundingBox.southWest.latitude, lng: city.boundingBox.southWest.longitude},
             {lat: city.boundingBox.northEast.latitude, lng: city.boundingBox.northEast.longitude}
         ));
-        rectangle('#ffffff', 1.0, 1, 0.1, city.boundingBox);
+        cleanBoundingBoxContainer();
+        boundingBoxContainer.push(rectangle('#ffffff', 1.0, 1, 0.1, city.boundingBox));
     });
 };

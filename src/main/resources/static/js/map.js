@@ -1,4 +1,5 @@
 var map;
+var boundingBoxContainer = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), mapConfiguration());
