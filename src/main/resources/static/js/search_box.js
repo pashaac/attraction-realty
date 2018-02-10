@@ -18,6 +18,7 @@ function initSearchBox(map) {
                 }
             }
         });
+        cleanBoundingBoxContainer();
         reverseGeolocation({lat: bounds.getCenter().lat(), lng: bounds.getCenter().lng()});
     });
 }

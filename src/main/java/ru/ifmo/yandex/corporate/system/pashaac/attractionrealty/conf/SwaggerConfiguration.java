@@ -1,11 +1,7 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.conf;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.controller.GeolocationController;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.GeolocationService;
-import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.util.GeoEarthMathUtils;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -20,7 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * on 23:18 15.01.18.
  */
 @EnableSwagger2
-//@ComponentScan(basePackageClasses = {GeolocationController.class, GeolocationService.class})
 @Configuration
 public class SwaggerConfiguration {
 

@@ -64,17 +64,17 @@ public class QuadTreeDataCollector {
                 continue;
             }
 
-
             int searchedBefore = venues.size();
             switch (source) {
                 case GOOGLE:
+                    venues.addAll(googleService.venueValidation(boundingBoxVenues));
                 case FOURSQUARE:
                     venues.addAll(foursquareService.venueValidation(boundingBoxVenues));
             }
             logger.info("Was searched: {} {} venues, filtering: {}", boundingBoxVenues.size(), source, venues.size() - searchedBefore);
         }
         logger.info("API called approximately: {} times", apiCallCounter);
-//        logger.info("Total venues was searched and saved: {}", venueService.save(venues).size()); TODO: uncomment after DB implementation
+//        logger.info("Total venues was searched and saved: {}", venues.save(venues).size());
         logger.info("City area was scanned in {} ms", System.currentTimeMillis() - startTime);
         return venues;
     }

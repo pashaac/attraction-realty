@@ -66,7 +66,7 @@ public enum VenueCategory {
     }
 
     public static VenueCategory[] touristAttractions() {
-        return new VenueCategory[]{MUSEUM, PARK, THEATER, SHRINE, POINT_OF_INTEREST};
+        return new VenueCategory[]{MUSEUM, PARK}; // TODO: temporary for debug, THEATER, SHRINE, POINT_OF_INTEREST};
     }
 
 }

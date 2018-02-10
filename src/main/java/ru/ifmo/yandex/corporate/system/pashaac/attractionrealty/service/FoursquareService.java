@@ -8,6 +8,7 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +35,9 @@ public class FoursquareService {
     }
 
     public List<Venue> venueValidation(List<Venue> venues) {
-        return venues; // TODO: implement real validation
+        return venues.stream()
+                .filter(venue -> Objects.nonNull(venue.getCategory()))
+                .collect(Collectors.toList());
     }
 
     private String categoriesGrouping(VenueCategory... categories) {

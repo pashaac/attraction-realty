@@ -61,4 +61,11 @@ public class GeoEarthMathUtils {
     private static Marker getSouthEast(BoundingBox boundingBox) {
         return new Marker(boundingBox.getSouthWest().getLatitude(), boundingBox.getNorthEast().getLongitude());
     }
+
+    public static boolean contains(BoundingBox boundingBox, Marker point) {
+        boolean latitudeIntersection = boundingBox.getSouthWest().getLatitude() < point.getLatitude() && point.getLatitude() < boundingBox.getNorthEast().getLatitude();
+        boolean longitudeIntersection = boundingBox.getSouthWest().getLongitude() < point.getLongitude() && point.getLongitude() < boundingBox.getNorthEast().getLongitude();
+        return latitudeIntersection && longitudeIntersection;
+    }
+
 }

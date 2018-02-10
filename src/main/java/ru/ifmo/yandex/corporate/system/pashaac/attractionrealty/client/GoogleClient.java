@@ -98,7 +98,12 @@ public class GoogleClient {
                     gVenue.setDescription(String.format("Contact info:\n\tId: %s\n\tIcon: %s\nTypes: %s\nStatistic info:\n\tRating: %s", venue.placeId,
                             venue.icon, Arrays.toString(venue.types), venue.rating));
 
-                    gVenue.setCategory(categoryValueOf(venue));
+                    Optional<VenueCategory> category = categoryValueOf(venue);
+                    if (!category.isPresent()) {
+                        logger.info("Venue: {} does not have category :(", gVenue.getTitle());
+                        return null;
+                    }
+                    gVenue.setCategory(category.get());
                     gVenue.setSource(VenueSource.GOOGLE);
 
                     gVenue.setLocation(new Marker(venue.geometry.location.lat, venue.geometry.location.lng));
@@ -117,11 +122,11 @@ public class GoogleClient {
                 .collect(Collectors.toList());
     }
 
-    private VenueCategory categoryValueOf(PlacesSearchResult venue) {
+    private Optional<VenueCategory> categoryValueOf(PlacesSearchResult venue) {
         return Arrays.stream(venue.types)
                 .map(VenueCategory::valueOfByGoogleKey)
                 .filter(Optional::isPresent)
-                .findFirst().get().get(); // TODO: fix unchecked .get() calls
+                .findFirst().orElse(Optional.empty());
     }
 
 

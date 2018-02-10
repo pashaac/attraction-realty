@@ -8,6 +8,7 @@ import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,14 @@ public class GoogleService {
         return googleClient.search(boundingBox, categoriesGrouping(categories));
     }
 
-    private String categoriesGrouping(VenueCategory... categories) {
-        return Arrays.stream(categories).map(VenueCategory::getGoogleKey).collect(Collectors.joining(GOOGLE_PLACE_TYPES_SEPARATOR ));
+    public List<Venue> venueValidation(List<Venue> venues) {
+        return venues.stream()
+                .filter(venue -> Objects.nonNull(venue.getCategory()))
+                .collect(Collectors.toList());
     }
+
+    private String categoriesGrouping(VenueCategory... categories) {
+        return Arrays.stream(categories).map(VenueCategory::getGoogleKey).collect(Collectors.joining(GOOGLE_PLACE_TYPES_SEPARATOR));
+    }
+
 }
