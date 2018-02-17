@@ -43,9 +43,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 
     compile files('src/main/resources/libs/geocalc-0.5.1.jar')
+//    compile 'me.atlis:foursquare-api:1.0.6'
     compile files('src/main/resources/libs/foursquare-api-1.0.7.jar')
     compile 'com.google.maps:google-maps-services:0.2.6'
-//    compile group: 'org.json', name: 'json', version: '20171018' // TODO: deal with it
+    compile 'org.json:json:20171018'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

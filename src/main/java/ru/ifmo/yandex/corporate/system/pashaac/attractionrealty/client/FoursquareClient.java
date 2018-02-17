@@ -3,6 +3,7 @@ package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.client;
 import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.FoursquareApiException;
 import fi.foyt.foursquare.api.Result;
+import fi.foyt.foursquare.api.entities.Category;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 import org.slf4j.Logger;
@@ -52,7 +53,21 @@ public class FoursquareClient {
     }
 
     private VenueCategory categoryValueOf(CompactVenue venue) {
-        return VenueCategory.MUSEUM; // TODO: fix category value of
+        Queue<Category> categories = new ArrayDeque<>(Arrays.asList(venue.getCategories()));
+        while (!categories.isEmpty()) {
+            Category category = categories.poll();
+            if (category == null) {
+                continue;
+            }
+            Optional<VenueCategory> venueCategory = VenueCategory.valueOfByFoursquareKey(category.getId());
+            if (venueCategory.isPresent()) {
+                return venueCategory.get();
+            }
+            if (Objects.nonNull(category.getCategories())) {
+                categories.addAll(Arrays.asList(category.getCategories()));
+            }
+        }
+        return null;
     }
 
     public List<Venue> search(BoundingBox boundingBox, String foursquareCategories) {
@@ -85,7 +100,7 @@ public class FoursquareClient {
             throw new FoursquareApiException("Foursquare venues search api call return code " + venuesSearchResult.getMeta().getCode());
         }
 
-        return Arrays.stream(venuesSearchResult.getResult().getVenues())
+        return new ArrayList<>(Arrays.stream(venuesSearchResult.getResult().getVenues())
                 .map(venue -> {
                     Venue fVenue = new Venue();
 
@@ -93,7 +108,7 @@ public class FoursquareClient {
                     fVenue.setDescription(String.format("Contact info:\n\tPhone: %s\n\tE-mail: %s\n\tTwitter: %s\n\tFacebook: %s\n\tId: %s\n" +
                                     "URL: %s\n" + "Statistic info:\n\tRating: %s\n\tCheckins: %s\n\tUsers: %s\n\tTip: %s\n",
                             venue.getContact().getFormattedPhone(), venue.getContact().getEmail(), venue.getContact().getTwitter(),
-                            venue.getContact().getFacebook(),venue.getId(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
+                            venue.getContact().getFacebook(), venue.getId(), venue.getUrl(), venue.getRating(), venue.getStats().getCheckinsCount(),
                             venue.getStats().getUsersCount(), venue.getStats().getTipCount()));
 
                     fVenue.setCategory(categoryValueOf(venue));
@@ -113,7 +128,8 @@ public class FoursquareClient {
 
                     return fVenue;
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(Venue::getTitle, v -> v))
+                .values());
     }
 
     public Integer getVenueSearchLimit() {

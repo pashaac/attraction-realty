@@ -1,11 +1,13 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * City entity with city/country identification variables
@@ -34,6 +36,9 @@ public class City {
     })
     private BoundingBox boundingBox;
 
+    @JsonManagedReference("city-venue")
+    @OneToMany(targetEntity = Venue.class, cascade = CascadeType.REMOVE, mappedBy = "city")
+    private List<Venue> venues;
 
     public City(String city, String country, BoundingBox boundingBox) {
         this.city = city;

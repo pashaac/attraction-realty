@@ -1,4 +1,4 @@
-package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service;
+package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.data;
 
 import org.springframework.stereotype.Service;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.client.GoogleClient;
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class GoogleService {
+public class GoogleService extends AbstractVenueMiner {
 
     private static final String GOOGLE_PLACE_TYPES_SEPARATOR = "|";
 
@@ -22,14 +22,17 @@ public class GoogleService {
         this.googleClient = googleClient;
     }
 
-    public boolean isReachTheLimits(List<Venue> venues) {
-        return venues.size() >= googleClient.getVenueSearchLimit();
+    @Override
+    public boolean isReachTheLimits(int venues) {
+        return venues >= googleClient.getVenueSearchLimit();
     }
 
+    @Override
     public List<Venue> mine(BoundingBox boundingBox, VenueCategory... categories) {
         return googleClient.search(boundingBox, categoriesGrouping(categories));
     }
 
+    @Override
     public List<Venue> venueValidation(List<Venue> venues) {
         return venues.stream()
                 .filter(venue -> Objects.nonNull(venue.getCategory()))

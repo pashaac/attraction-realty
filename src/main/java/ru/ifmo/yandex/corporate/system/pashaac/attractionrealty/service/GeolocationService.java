@@ -36,6 +36,10 @@ public class GeolocationService {
         this.geolocationRepository = geolocationRepository;
     }
 
+    public City find(Long id) {
+        return geolocationRepository.findOne(id);
+    }
+
     public City reverseGeolocation(Marker location) {
         log.info("Try determine city by coordinates ({}, {}) ...", location.getLatitude(), location.getLongitude());
         return geolocationRepository.findAll().stream()

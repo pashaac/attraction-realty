@@ -9,18 +9,15 @@ import java.util.Optional;
  * Google: https://developers.google.com/places/supported_types
  */
 public enum VenueCategory {
-    // Foursquare: Museum
+    // Foursquare: Museum, Art Museum, History Museum, Theater, Opera house
     // Google: Museum
-    MUSEUM("4bf58dd8d48988d181941735", "museum"),
+    ART("4bf58dd8d48988d181941735,4bf58dd8d48988d18f941735,4bf58dd8d48988d190941735,4bf58dd8d48988d137941735,4bf58dd8d48988d136941735", "museum"),
     // Foursquare: Theme Park, Park, Garden, Forest, National park
     // Google: Park
     PARK("4bf58dd8d48988d182941735,4bf58dd8d48988d163941735,4bf58dd8d48988d15a941735,52e81612bcbc57f1066b7a23,52e81612bcbc57f1066b7a21", "park"),
-    // Foursquare: Theater, Opera house
-    // Google:
-    THEATER("4bf58dd8d48988d137941735,4bf58dd8d48988d136941735", null),
-    // Foursquare: Spiritual Center
+    // Foursquare: Church, Shrine, Temple
     // Google: Place of worship
-    SHRINE("4bf58dd8d48988d131941735", "place_of_worship"),
+    SHRINE("4bf58dd8d48988d132941735,4eb1d80a4b900d56c88a45ff,4bf58dd8d48988d13a941735", "place_of_worship"),
     // Foursquare: Street art, Water park, Zoo, Beach, Bridge, Castle, Fountain, Palace, Pedestrian Plaza, Plaza
     // Google: Point of interest
     POINT_OF_INTEREST("507c8c4091d498d9fc8c67a9,4bf58dd8d48988d193941735,4bf58dd8d48988d17b941735,4bf58dd8d48988d1e2941735,4bf58dd8d48988d1df941735" +
@@ -66,7 +63,7 @@ public enum VenueCategory {
     }
 
     public static VenueCategory[] touristAttractions() {
-        return new VenueCategory[]{MUSEUM, PARK}; // TODO: temporary for debug, THEATER, SHRINE, POINT_OF_INTEREST};
+        return new VenueCategory[]{SHRINE}; // TODO: increase in future
     }
 
 }
