@@ -2,7 +2,6 @@ package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.Marker;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCategory;
@@ -12,9 +11,8 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "category"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "category", "rating"}))
 public class Venue {
 
     @Id
@@ -22,6 +20,8 @@ public class Venue {
     private Long id;
 
     private String title;
+
+    @Column(length = 1024)
     private String description;
 
     @Enumerated(value = EnumType.STRING)

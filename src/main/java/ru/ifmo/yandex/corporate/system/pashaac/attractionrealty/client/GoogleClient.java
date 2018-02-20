@@ -4,7 +4,10 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.*;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,7 +89,6 @@ public class GoogleClient {
         PlacesSearchResponse placesSearchResponse = PlacesApi.nearbySearchQuery(googleGeoApiContext, new LatLng(center.getLatitude(), center.getLongitude()))
                 .radius(radius)
                 .custom("type", googleCategories)
-                .rankby(RankBy.DISTANCE)
                 .await();
 
         return Arrays.stream(placesSearchResponse.results)

@@ -100,7 +100,7 @@ public class FoursquareClient {
             throw new FoursquareApiException("Foursquare venues search api call return code " + venuesSearchResult.getMeta().getCode());
         }
 
-        return new ArrayList<>(Arrays.stream(venuesSearchResult.getResult().getVenues())
+        return Arrays.stream(venuesSearchResult.getResult().getVenues())
                 .map(venue -> {
                     Venue fVenue = new Venue();
 
@@ -128,8 +128,7 @@ public class FoursquareClient {
 
                     return fVenue;
                 })
-                .collect(Collectors.toMap(Venue::getTitle, v -> v))
-                .values());
+                .collect(Collectors.toList());
     }
 
     public Integer getVenueSearchLimit() {

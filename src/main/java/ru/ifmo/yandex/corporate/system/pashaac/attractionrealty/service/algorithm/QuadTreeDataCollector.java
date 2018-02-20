@@ -1,7 +1,6 @@
 package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.algorithm;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCategory;
@@ -18,10 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+@Slf4j
 @Service
 public class QuadTreeDataCollector {
-
-    private static final Logger logger = LoggerFactory.getLogger(QuadTreeDataCollector.class);
 
     private final FoursquareService foursquareService;
     private final GoogleService googleService;
@@ -40,12 +38,12 @@ public class QuadTreeDataCollector {
         int ind = 0;
         int apiCallCounter = 0;
         while (!boxQueue.isEmpty()) {
-            logger.debug("Trying to get places {} for boundingbox #{}...", categories, ind++);
+            log.debug("Trying to get places {} for boundingbox #{}...", categories, ind++);
             BoundingBox boundingBox = boxQueue.poll();
             List<Venue> boundingBoxVenues = venueService.mine(boundingBox, categories);
             ++apiCallCounter;
             if (venueService.isReachTheLimits(boundingBoxVenues.size())) {
-                logger.debug("Split bounding box, because {} discovered max amount of venues", source);
+                log.debug("Split bounding box, because {} discovered max amount of venues", source);
                 boxQueue.add(GeoEarthMathUtils.leftDownBoundingBox(boundingBox));
                 boxQueue.add(GeoEarthMathUtils.leftUpBoundingBox(boundingBox));
                 boxQueue.add(GeoEarthMathUtils.rightDownBoundingBox(boundingBox));
@@ -54,12 +52,11 @@ public class QuadTreeDataCollector {
             }
 
             int searchedBefore = venues.size();
-            venues.addAll(venueService.venueValidation(boundingBoxVenues));
-            logger.info("Was searched: {} {} venues, filtering: {}", boundingBoxVenues.size(), source, venues.size() - searchedBefore);
+            venues.addAll(venueService.venueValidation(city, boundingBox, boundingBoxVenues));
+            log.info("Was searched: {} %-20 {} venues, filtering: {}", boundingBoxVenues.size(), source, venues.size() - searchedBefore);
         }
-        logger.info("API called approximately: {} times", apiCallCounter);
-        venues.forEach(venue -> venue.setCity(city));
-        logger.info("City area was scanned in {} ms", System.currentTimeMillis() - startTime);
+        log.info("API called approximately: {} times", apiCallCounter);
+        log.info("City area was scanned in {} ms", System.currentTimeMillis() - startTime);
         return venues;
     }
 
@@ -81,11 +78,11 @@ public class QuadTreeDataCollector {
         List<BoundingBox> boundingBoxes = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         while (!boxQueue.isEmpty()) {
-            logger.debug("Boundingbox collection size: {}", boundingBoxes.size());
+            log.debug("Boundingbox collection size: {}", boundingBoxes.size());
             BoundingBox boundingBox = boxQueue.poll();
             int boundingBoxVenues = 0;
             boolean reachLimit = false;
-            for (Venue venue: venues) {
+            for (Venue venue : venues) {
                 if (GeoEarthMathUtils.contains(boundingBox, venue.getLocation())) {
                     ++boundingBoxVenues;
                 }
@@ -98,12 +95,12 @@ public class QuadTreeDataCollector {
                 boundingBoxes.add(boundingBox);
                 continue;
             }
-                boxQueue.add(GeoEarthMathUtils.leftDownBoundingBox(boundingBox));
-                boxQueue.add(GeoEarthMathUtils.leftUpBoundingBox(boundingBox));
-                boxQueue.add(GeoEarthMathUtils.rightDownBoundingBox(boundingBox));
-                boxQueue.add(GeoEarthMathUtils.rightUpBoundingBox(boundingBox));
+            boxQueue.add(GeoEarthMathUtils.leftDownBoundingBox(boundingBox));
+            boxQueue.add(GeoEarthMathUtils.leftUpBoundingBox(boundingBox));
+            boxQueue.add(GeoEarthMathUtils.rightDownBoundingBox(boundingBox));
+            boxQueue.add(GeoEarthMathUtils.rightUpBoundingBox(boundingBox));
         }
-        logger.info("BoundingBox map with {} boundingboxes was created in time: {} ms", boundingBoxes.size(), System.currentTimeMillis() - startTime);
+        log.info("BoundingBox map with {} boundingboxes was created in time: {} ms", boundingBoxes.size(), System.currentTimeMillis() - startTime);
         return boundingBoxes;
     }
 }

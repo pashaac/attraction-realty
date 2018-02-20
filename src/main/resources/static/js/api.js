@@ -5,7 +5,7 @@ var reverseGeolocation = function (args) { // {lat: 0.0, lng: 0.0}
             {lat: city.boundingBox.southWest.latitude, lng: city.boundingBox.southWest.longitude},
             {lat: city.boundingBox.northEast.latitude, lng: city.boundingBox.northEast.longitude}));
         boundingBoxContainer.push(rectangle('#ffffff', 1.0, 1, 0.1, city.boundingBox));
-        collectCityAttraction({cityId: city.id, source: 'FOURSQUARE'});
+        collectCityAttraction({cityId: city.id, source: 'GOOGLE'});
     });
 };
 
@@ -39,6 +39,7 @@ var collectCityAttraction = function (args) { // {cityId: 1, source: 'FOURSQUARE
                     icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|A2E726',
                 })
             });
+            emulateCollectionAlgorithmGrid(args);
         } else {
             console.log(window.location.href + 'venue/city/attraction/mine?' + $.param(args));
             $.put('venue/city/attraction/mine', $.param(args), function (venues) {
@@ -51,8 +52,17 @@ var collectCityAttraction = function (args) { // {cityId: 1, source: 'FOURSQUARE
                         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|A2E726',
                     })
                 });
+                emulateCollectionAlgorithmGrid(args);
             });
         }
     });
+};
 
+var emulateCollectionAlgorithmGrid = function (args) {
+    console.log(window.location.href + 'venue/city/attraction/grid?' + $.param(args));
+    $.get('venue/city/attraction/grid', $.param(args), function (boundingBoxes) {
+        boundingBoxes.forEach(function (boundingBox) {
+            boundingBoxContainer.push(rectangle('#ffffff', 1.0, 1, 0.1, boundingBox));
+        })
+    });
 };

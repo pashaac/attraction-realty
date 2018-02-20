@@ -2,6 +2,7 @@ package ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.service.data;
 
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.BoundingBox;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.data.VenueCategory;
+import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.City;
 import ru.ifmo.yandex.corporate.system.pashaac.attractionrealty.domain.Venue;
 
 import java.util.List;
@@ -13,5 +14,5 @@ import java.util.List;
 public abstract class AbstractVenueMiner {
     public abstract List<Venue> mine(BoundingBox boundingBox, VenueCategory... categories);
     public abstract boolean isReachTheLimits(int venues);
-    public abstract List<Venue> venueValidation(List<Venue> venues);
+    public abstract List<Venue> venueValidation(City city, BoundingBox boundingBox, List<Venue> venues);
 }
